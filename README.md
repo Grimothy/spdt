@@ -101,6 +101,35 @@ The Docker setup uses multi-stage builds for optimal image size:
 2. **builder**: Builds the application
 3. **runner**: Runs the production build with minimal footprint
 
+## Repository & CI/CD
+
+### GitHub Repository
+This project is set up for automated Docker publishing via GitHub Actions.
+
+#### Initial Setup
+1. Create a new repository on GitHub named `spdt`
+2. Run the setup script:
+   ```bash
+   ./setup-repo.sh
+   ```
+   Or manually:
+   ```bash
+   git remote add origin https://github.com/YOUR_USERNAME/spdt.git
+   git push -u origin main
+   ```
+
+#### Docker Hub Integration
+The repository includes GitHub Actions that automatically build and push Docker images to Docker Hub on every push to the `main` branch.
+
+**Required GitHub Secrets:**
+- `DOCKERHUB_USERNAME`: Your Docker Hub username
+- `DOCKERHUB_TOKEN`: Docker Hub access token (create at https://hub.docker.com/settings/security)
+
+Once configured, images will be available as:
+- `yourusername/spdt:latest`
+- `yourusername/spdt:main` (on main branch)
+- `yourusername/spdt:main-<commit-sha>` (specific commits)
+
 ## Contributing
 
 1. Fork the repository
