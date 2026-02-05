@@ -160,8 +160,10 @@ const GlassGenerator: React.FC = () => {
       borderWidth: 1,
       borderColor: '#ffffff',
       borderOpacity: 0.4,
+      shadowX: 0,
       shadowY: 8,
       shadowBlur: 32,
+      shadowColor: '#1f2937',
       shadowOpacity: 0.15,
       noiseOpacity: 0.05,
     },
@@ -175,8 +177,10 @@ const GlassGenerator: React.FC = () => {
       borderWidth: 1.5,
       borderColor: '#ffffff',
       borderOpacity: 0.2,
+      shadowX: 0,
       shadowY: 12,
       shadowBlur: 40,
+      shadowColor: '#1f2937',
       shadowOpacity: 0.2,
       noiseOpacity: 0.08,
     },
@@ -190,8 +194,10 @@ const GlassGenerator: React.FC = () => {
       borderWidth: 0,
       borderColor: '#ffffff',
       borderOpacity: 0,
+      shadowX: 0,
       shadowY: 4,
       shadowBlur: 16,
+      shadowColor: '#1f2937',
       shadowOpacity: 0.1,
       noiseOpacity: 0.02,
     },
@@ -205,8 +211,10 @@ const GlassGenerator: React.FC = () => {
       borderWidth: 1,
       borderColor: '#374151',
       borderOpacity: 0.5,
+      shadowX: 0,
       shadowY: 10,
       shadowBlur: 24,
+      shadowColor: '#1f2937',
       shadowOpacity: 0.4,
       noiseOpacity: 0.1,
     },
@@ -275,6 +283,7 @@ const GlassGenerator: React.FC = () => {
   const generateCSS = (): string => {
     const {
       blur,
+      saturation,
       opacity,
       color,
       borderWidth,
@@ -295,8 +304,8 @@ const GlassGenerator: React.FC = () => {
     return `.glass-panel {
   /* Glassmorphism Base */
   background: ${bgRgba};
-  backdrop-filter: blur(${blur}px);
-  -webkit-backdrop-filter: blur(${blur}px);
+  backdrop-filter: blur(${blur}px) saturate(${saturation}%);
+  -webkit-backdrop-filter: blur(${blur}px) saturate(${saturation}%);
   
   /* Border & Shape */
   border-radius: ${finalRadius};
@@ -570,6 +579,24 @@ const GlassGenerator: React.FC = () => {
                   <div>
                     <div className="flex justify-between mb-1">
                       <label className="text-sm font-medium text-gray-600">
+                        Saturation
+                      </label>
+                      <span className="text-xs text-gray-400">{glassParams.saturation}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="200"
+                      value={glassParams.saturation}
+                      onChange={(e) =>
+                        handleParamChange('saturation', parseInt(e.target.value) || 0)
+                      }
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">
                         Opacity (Tint)
                       </label>
                       <span className="text-xs text-gray-400">
@@ -596,11 +623,119 @@ const GlassGenerator: React.FC = () => {
                       className="w-8 h-8 rounded cursor-pointer border-0 p-0 overflow-hidden"
                     />
                   </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">
+                        Border Width
+                      </label>
+                      <span className="text-xs text-gray-400">{glassParams.borderWidth}px</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      value={glassParams.borderWidth}
+                      onChange={(e) =>
+                        handleParamChange('borderWidth', parseInt(e.target.value) || 0)
+                      }
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">
+                        Border Opacity
+                      </label>
+                      <span className="text-xs text-gray-400">
+                        {Math.round(glassParams.borderOpacity * 100)}%
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={glassParams.borderOpacity * 100}
+                      onChange={(e) =>
+                        handleParamChange('borderOpacity', parseInt(e.target.value) / 100)
+                      }
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-600">Border Color</label>
+                    <input
+                      type="color"
+                      value={glassParams.borderColor}
+                      onChange={(e) => handleParamChange('borderColor', e.target.value)}
+                      className="w-8 h-8 rounded cursor-pointer border-0 p-0 overflow-hidden"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">
+                        Noise Opacity
+                      </label>
+                      <span className="text-xs text-gray-400">
+                        {Math.round(glassParams.noiseOpacity * 100)}%
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={glassParams.noiseOpacity * 100}
+                      onChange={(e) =>
+                        handleParamChange('noiseOpacity', parseInt(e.target.value) / 100)
+                      }
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <hr className="border-gray-100" />
+
+              <section>
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <Layers size={14} /> Shadow
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">Shadow X Offset</label>
+                      <span className="text-xs text-gray-400">{glassParams.shadowX}px</span>
+                    </div>
+                    <input type="range" min="-50" max="50" value={glassParams.shadowX} onChange={(e) => handleParamChange('shadowX', parseInt(e.target.value) || 0)} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">Shadow Y Offset</label>
+                      <span className="text-xs text-gray-400">{glassParams.shadowY}px</span>
+                    </div>
+                    <input type="range" min="-50" max="50" value={glassParams.shadowY} onChange={(e) => handleParamChange('shadowY', parseInt(e.target.value) || 0)} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">Shadow Blur</label>
+                      <span className="text-xs text-gray-400">{glassParams.shadowBlur}px</span>
+                    </div>
+                    <input type="range" min="0" max="100" value={glassParams.shadowBlur} onChange={(e) => handleParamChange('shadowBlur', parseInt(e.target.value) || 0)} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm font-medium text-gray-600">Shadow Opacity</label>
+                      <span className="text-xs text-gray-400">{Math.round(glassParams.shadowOpacity * 100)}%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value={glassParams.shadowOpacity * 100} onChange={(e) => handleParamChange('shadowOpacity', parseInt(e.target.value) / 100)} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-600">Shadow Color</label>
+                    <input type="color" value={glassParams.shadowColor} onChange={(e) => handleParamChange('shadowColor', e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0 p-0 overflow-hidden" />
+                  </div>
                 </div>
               </section>
             </>
           )}
-
           {activeTab === 'sizes' && (
             <div className="space-y-4">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
@@ -773,8 +908,8 @@ const GlassGenerator: React.FC = () => {
                   width: `${glassParams.width}px`,
                   height: `${glassParams.height}px`,
                   background: hexToRgba(glassParams.color, glassParams.opacity),
-                  backdropFilter: `blur(${glassParams.blur}px)`,
-                  WebkitBackdropFilter: `blur(${glassParams.blur}px)`,
+                   backdropFilter: `blur(${glassParams.blur}px) saturate(${glassParams.saturation}%)`,
+                   WebkitBackdropFilter: `blur(${glassParams.blur}px) saturate(${glassParams.saturation}%)`,
                   borderRadius: getRadius(),
                   border: `${glassParams.borderWidth}px solid ${hexToRgba(
                     glassParams.borderColor,

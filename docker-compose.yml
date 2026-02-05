@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   app:
-    # Replace 'username/repository:tag' with your actual image name
-    image: grimothy/spdt:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "${DEV_PORT:-4173}:${DEV_PORT:-4173}"
     volumes:
