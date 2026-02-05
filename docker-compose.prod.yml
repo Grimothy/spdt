@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  app:
+    image: grimothy/spdt:latest
+    ports:
+      - "${PROD_PORT:-4173}:4173"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped

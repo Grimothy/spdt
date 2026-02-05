@@ -24,25 +24,40 @@ You can change the dev server port used by docker-compose via the `DEV_PORT` env
 
 #### Quick Start
 ```bash
-# Start development server with hot reload
+# Development with hot reload (builds locally)
 npm run docker:dev
 # or
 docker-compose up --build
+
+# Production using published image
+npm run docker:prod
+# or
+docker-compose -f docker-compose.prod.yml up
 
 # Access the application at http://localhost:${DEV_PORT:-4173}
 ```
 
 #### Other Docker Commands
 ```bash
-# Build production image
+# Build production image locally
 npm run docker:build
 
-# Run production container
+# Run production container locally
 npm run docker:run
 
 # Stop development containers
 npm run docker:down
+
+# Stop production containers
+docker-compose -f docker-compose.prod.yml down
 ```
+
+### Development vs Production Docker
+
+- **`docker-compose.yml`** (Development): Builds locally with source code mounted for hot reload
+- **`docker-compose.prod.yml`** (Production): Uses published Docker Hub image for production deployment
+
+Use development for coding, production for deployment.
 
 ### Local Development (Alternative)
 
